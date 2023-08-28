@@ -3,7 +3,7 @@ import chokidar from "chokidar";
 import debaunce from "lodash.debounce";
 import program from "caporal";
 import fs from "fs";
-import { spawn } from "child_process";
+import child_process, { spawn } from "child_process";
 
 program
   .version("1.0.0")
@@ -12,8 +12,12 @@ program
     const { filename } = arg;
     const targetFileName: string = filename || "index.js";
 
+    let proc: child_process.ChildProcess;
     const startExecution = debaunce(() => {
-      spawn("node", [targetFileName], { stdio: "inherit" });
+      if (proc) {
+        proc.kill();
+      }
+      proc = spawn("node", [targetFileName], { stdio: "inherit" });
     }, 300);
 
     try {
