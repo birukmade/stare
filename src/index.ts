@@ -4,6 +4,7 @@ import debaunce from "lodash.debounce";
 import program from "caporal";
 import fs from "fs";
 import child_process, { spawn } from "child_process";
+import chalk from "chalk";
 
 program
   .version("1.0.0")
@@ -16,7 +17,9 @@ program
     const startExecution = debaunce(() => {
       if (proc) {
         proc.kill();
+        console.log(chalk.italic.green("[stare] changes detected..."));
       }
+      console.log(chalk.green(`[stare] running ${targetFileName}`));
       proc = spawn("node", [targetFileName], { stdio: "inherit" });
     }, 300);
 
